@@ -1,0 +1,10 @@
+.ipynb_checkpoints/
+*.ipynb
+*.csv
+__pycache__
+**/__pycache__/**
+*.egg-info
+build
+dist
+*.gpx
+*.gz
