@@ -24,7 +24,7 @@ def _process_trackpoint(trackpoint, update_dict={}):
     """Process a trackpoint element into a dictionary"""
     ext_dict = {}
     if trackpoint.find('extensions') is not None:
-        for extension in trackpoint.find('extensions').getchildren():
+        for extension in list(trackpoint.find('extensions')):
             ext_dict.update({
                 x.tag: _try_to_float(x.text)
                 for x in extension.getchildren()
@@ -48,8 +48,7 @@ def _process_track(trk):
     """process a trk element found in a gpx file"""
     non_trkseg_dict = {
         x.tag: x.text
-        for x in
-        [x for x in trk.getchildren() if x.tag not in ('trkseg', 'link')]
+        for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
     }
     all_trackpoints = []
     for trkseg in trk.findall('trkseg'):
