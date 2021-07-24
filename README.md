@@ -1,12 +1,13 @@
-# Python GPXCSV 
+# GPX to CSV conversion (or to a python list)
 
-This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It should support multiple `<trk>` entries per file, multiple segments.
+This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It should support multiple `<trk>` entries per file, multiple `<trkseg>` segments.
 
-`gpxcsv` uses the GPX tags as column names. Because of this, it should be able to process any gpx file, not just ones with specific data. However, column names may be a bit ambigious as it will not give them any meaningful column names beyond what is in the gpx data. And column ordering may be suboptimal, given the code has no preconceived notions of what columns will be there - latitude and longitude may not be adajacent for example.
+`gpxcsv` uses the GPX tags as column names. It should be able to process any gpx file, not just ones with specific data nor will it ignore any fields. However, column names may be a bit ambigious as it will not give them any meaningful column names beyond what is in the gpx data. And column ordering may be suboptimal, given the code has no preconceived notions of what columns will be there - latitude and longitude may not be adajacent for example.
 
-Requires `lxml`
+Requires `lxml` and python 3.6+ (I like having f-strings)
 
-### Usage
+
+## Usage
 
 1. Clone and install module (pip install coming soon)
 ```python
@@ -34,3 +35,16 @@ import pandas as pd
 df = pd.DataFrame(gpx_list)
 
 ```
+
+## Test CSV files
+
+I tested the conversion against a handful of my own GPX files (exported from Apple Health / Apple Watch via the excellent [HealthFit app](https://apps.apple.com/us/app/healthfit/id1202650514)).
+
+In addition I used several files from this [sample-gpx repository](https://github.com/gps-touring/sample-gpx), specifically:
+
+* bogus_basin.gpx
+* Alt_Portsmouth.gpx
+* MoselradwegAusWiki.gpx
+* VoieVerteHauteVosges.gpx
+
+Hope to add unit tests against those or some sort of test list soon.

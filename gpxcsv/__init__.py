@@ -55,7 +55,7 @@ def _process_track(trk):
     for trkseg in trk.findall('trkseg'):
         seg_trackpoints = [
             _process_trackpoint(x, non_trkseg_dict)
-            for x in trkseg.getchildren()
+            for x in trkseg.findall('trkpt')
         ]
         all_trackpoints.extend(seg_trackpoints)
     return all_trackpoints
