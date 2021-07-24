@@ -84,6 +84,11 @@ def _process_tree_tracks(root):
 
 def _list_to_csv(list_of_dicts, csv_file):
     """Process a list of dictionaries into a csv file"""
+    if not list_of_dicts:
+        print(
+            "No valid data to convert to csv. Please examine the gpx file directly."
+        )
+        return
     header = {}
     for d in list_of_dicts:
         header = sorted(list(set(d.keys()).union(header)))

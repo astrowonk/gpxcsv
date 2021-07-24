@@ -47,4 +47,4 @@ In addition I used several files from this [sample-gpx repository](https://githu
 * MoselradwegAusWiki.gpx
 * VoieVerteHauteVosges.gpx
 
-Hope to add unit tests against those or some sort of test list soon.
+as well as all the test files from [gpxpy](https://github.com/tkrajina/gpxpy/tree/dev/test_files). Many of those intentionally lack any coherent flow of `trk -> trkseg -> trkpt` so they don't produce a valid csv file.
