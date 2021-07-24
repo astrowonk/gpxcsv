@@ -1,10 +1,12 @@
-# GPX to CSV conversion (or to a python list)
+# GPX to CSV conversion (or to a Python list)
 
-This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It should support multiple `<trk>` entries per file, multiple `<trkseg>` segments.
+This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It should support multiple `<trk>` entries per file, multiple `<trkseg>` segments. `trk` and `trkseg` specific tags should be added as columns to the final csv file distinguishing the different tracks from each other. 
 
-`gpxcsv` uses the GPX tags as column names. It should be able to process any gpx file, not just ones with specific data nor will it ignore any fields. However, column names may be a bit ambigious as it will not give them any meaningful column names beyond what is in the gpx data. And column ordering may be suboptimal, given the code has no preconceived notions of what columns will be there - latitude and longitude may not be adajacent for example.
+The module uses the GPX tags as column names. It should be able to process any gpx file, not just ones with specific data. If a gpx file uses extensions and has `hr` for heartrate data, it will make a csv with a `hr` column.
 
-Requires `lxml` and python 3.6+ (I like having f-strings)
+However, column names will simply reflect how they are tagged in the gpx file. Column ordering may be suboptimal, currently I'm simply sorting it alphabetically, so latitude and longitude may not be adajacent.
+
+Requires `lxml` and python 3.6+
 
 
 ## Usage
@@ -48,3 +50,36 @@ In addition I used several files from this [sample-gpx repository](https://githu
 * VoieVerteHauteVosges.gpx
 
 as well as all the test files from [gpxpy](https://github.com/tkrajina/gpxpy/tree/dev/test_files). Many of those intentionally lack any coherent flow of `trk -> trkseg -> trkpt` so they don't produce a valid csv file.
+
+The __bogus_basin__ file is a good example of conversion of multiple `trk` files. Though, the design case was more a single workout tracked with an Apple Watch (as that's the data I'm interested in myself.)
+
+## Example Input and Output:
+
+Here the beginning of a `tkpt` from a HealthFit/Apple HealthKit tracked run, with gps coords altered.
+
+```
+<trk>
+<type>running</type>
+<trkseg>
+<trkpt lat="45.0000" lon="-75.0000">
+    <ele>51.0000</ele>
+    <time>2021-07-21T12:37:41.000Z</time>
+    <extensions>
+        <gpxtpx:TrackPointExtension>
+            <gpxtpx:atemp>24</gpxtpx:atemp>
+            <gpxtpx:cad>72</gpxtpx:cad>
+            <gpxtpx:speed>2.147612</gpxtpx:speed>
+            <gpxtpx:hAcc>6.406485</gpxtpx:hAcc>
+            <gpxtpx:vAcc>5.718293</gpxtpx:vAcc>
+        </gpxtpx:TrackPointExtension>
+    </extensions>
+...
+```
+
+This produces a CSV that begins:
+
+```
+atemp,cad,course,ele,hAcc,hr,lat,lon,speed,time,type,vAcc
+24.0,72.0,,51.0,6.406485,,45.0,-75.0,2.147612,2021-07-21T12:37:41.000Z,running,5.718293
+```
+

@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.2.2",
     author="Marcos Huerta",
     author_email="marcos@marcoshuerta.com",
-    description="Convert from GPX to CSV.",
+    description="Convert Garmin GPX file to CSV",
     install_requires=["lxml"],
     python_requires=">=3.6",
     long_description=long_description,
