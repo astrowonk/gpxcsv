@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.2.3",
     author="Marcos Huerta",
     author_email="marcos@marcoshuerta.com",
-    description="Convert Garmin GPX file to CSV or JSON",
+    description="Convert Garmin GPX file to CSV or simple JSON",
     install_requires=["lxml"],
     python_requires=">=3.6",
     long_description=long_description,
