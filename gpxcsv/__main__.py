@@ -12,11 +12,7 @@ def main():
                         type=str,
                         help='output file name, optional',
                         default=None)
-    parser.add_argument('-j',
-                        '--json',
-                        type=bool,
-                        action='store_true',
-                        default=False)
+    parser.add_argument('-j', '--json', action='store_true', default=False)
     args = parser.parse_args()
     gpxtofile(args.input_file, args.output_file, json=args.json)
 
