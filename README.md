@@ -9,24 +9,29 @@ However, column names will simply reflect how they are tagged in the gpx file. C
 Requires `lxml` and python 3.6+
 
 
-## Usage
+## Installation and Usage
 
-1. Clone and install module (pip install coming soon)
+1. Pip install
+```python
+pip install gpxcsv
+```
+
+Or clone and install module
 ```python
 git clone https://github.com/astrowonk/gpxcsv.git
 cd gpxcsv
 python setup.py install
 ```
-2. Use directly with command line tool or as a python module. The following examples will create `input.csv`
+2. Use directly with command line tool or as a python module. The following examples will create `myrun.csv`
 ```
-gpxcsv input.gpx
-python -m input.gpx
+gpxcsv myrun.gpx
+python -m myrun.gpx
 ```
 Or specify an output file name
 ```
-gpxcsv input.gpx -o new_name.csv
+gpxcsv myrun.gpx -o myfirstrun.csv
 ```
-3. Use the `gpxtolist` function to read the gpx file into a python list suitable for conversion into a pandas dataframe in a notebook or ipython.
+3. Use the `gpxtolist` function to read the gpx file into a python list suitable for conversion into a pandas dataframe in a notebook or iPython.
 
 ```
 from gpxcsv import gpxtolist
