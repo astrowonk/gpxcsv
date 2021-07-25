@@ -2,12 +2,19 @@
 
 This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It should support multiple `<trk>` entries per file, multiple `<trkseg>` segments. `trk` and `trkseg` specific tags should be added as columns to the final csv file distinguishing the different tracks from each other. 
 
-The module uses the GPX tags as column names. It should be able to process any gpx file, not just ones with specific data. If a gpx file uses extensions and has `hr` for heartrate data, it will make a csv with a `hr` column.
+## Advantages over alternatives
 
-However, column names will simply reflect how they are tagged in the gpx file. Column ordering may be suboptimal, currently I'm simply sorting it alphabetically, so latitude and longitude may not be adajacent.
+* **Preserves most data:** If a gpx file uses extensions and has `hr` for heartrate data, it will make a csv with a `hr` column. Other converters require specific support for specific column names.
 
-Requires `lxml` and python 3.6+
+* **Minimal dependencies:** Only requires lxml.
 
+* **Easy command line usage** `gpxcsv file.gpx` and your done.
+
+* **Preserves and identifies multi-trk or multi-trkseg data**. Because trk and trkseg level tags get their own ID columns, multi-track or segment files remain usable.
+
+* **Pandas dataframe easy if you need it** Create a python list for easy conversation to a dataframe, but no pandas required.
+
+(Admittedly, I didn't discover some of the other options until after I made this.)
 
 ## Installation and Usage
 
