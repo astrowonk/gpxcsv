@@ -1,6 +1,7 @@
 from lxml import etree
 import csv
 import gzip
+import json
 
 
 def _strip_ns_prefix(tree):
@@ -101,6 +102,17 @@ def _list_to_csv(list_of_dicts, csv_file):
             mywriter.writerow(row)
 
 
+def _list_to_json(list_of_dicts, json_file):
+    """Process a list of dictionaries into a json file"""
+    if not list_of_dicts:
+        print(
+            "No valid data to convert to json. Please examine the gpx file directly."
+        )
+        return
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(list_of_dicts, f, ensure_ascii=False, indent=4)
+
+
 def gpxtolist(gpxfile):
     """Convert a gpx file to a list of dictionaries"""
     root = _load_and_clean_gpx(gpxfile)
@@ -108,14 +120,27 @@ def gpxtolist(gpxfile):
     return all_trackpoints
 
 
-def gpxtocsv(gpxfile, csvfile=None):
-    """Convert a gpx file to a csv file"""
-    if csvfile is None:
-        if gpxfile.endswith('gpx'):
-            csvfile = gpxfile.replace('.gpx', '.csv')
-        elif gpxfile.endswith('gpx.gz'):
-            csvfile = gpxfile.replace('.gpx.gz', '.csv')
-        else:
-            csvfile = gpxfile + '.csv'
+def make_new_file_name(gpxfile, suffix):
+    """Make a new file name based on the old file name using the suffix"""
+    suffix = '.' + suffix
+    if gpxfile.endswith('gpx'):
+        output = gpxfile.replace('.gpx', suffix)
+    elif gpxfile.endswith('gpx.gz'):
+        output = gpxfile.replace('.gpx.gz', suffix)
+    else:
+        output = gpxfile + suffix
+    return output
 
-    _list_to_csv(gpxtolist(gpxfile), csvfile)
+
+def gpxtofile(gpxfile, output_name=None, json=False):
+    """Convert a gpx file to a csv or json file"""
+
+    #this logic feels like it could be cleaner
+    if json:
+        if not output_name:
+            output_name = make_new_file_name(gpxfile, 'json')
+        _list_to_json(gpxtolist(gpxfile), output_name)
+        return
+    if not output_name:
+        output_name = make_new_file_name(gpxfile, 'csv')
+    _list_to_csv(gpxtolist(gpxfile), output_name)
