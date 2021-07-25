@@ -4,7 +4,7 @@ This tool can convert most gpx files to csv format. It preserves trackpoint exte
 
 ## Advantages / Features
 
-* **Preserves most data:** If a gpx file uses extensions and has `hr` for heartrate data, it will make a csv with a `hr` column. No need to ever add specific support for specific new or requested column names.
+* **Preserves most trackpoint data:** If a gpx file uses extensions and has `hr` for heartrate data, it will make a csv with a `hr` column. No need to ever add specific support for specific new or requested column names.
 
 * **Minimal dependencies:** Only requires lxml.
 
