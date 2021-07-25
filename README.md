@@ -88,3 +88,4 @@ atemp,cad,course,ele,hAcc,hr,lat,lon,speed,time,type,vAcc
 24.0,72.0,,51.0,6.406485,,45.0,-75.0,2.147612,2021-07-21T12:37:41.000Z,running,5.718293
 ```
 
+Note that the `hr` column is not in the first trackpoint (or first several) but the header appears in the csv file.
