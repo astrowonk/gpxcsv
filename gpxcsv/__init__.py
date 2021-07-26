@@ -173,7 +173,8 @@ class GpxCSV():
 
     def gpxtofile(self, gpxfile, output_name=None, json=False):
         """Convert a gpx file to a csv or json file"""
-
+        assert gpxfile.endswith('.gpx') or gpxfile.endswith(
+            '.gpx.gz'), 'File must be gpx or gpx.gz'
         #this logic feels like it could be cleaner
         if json or output_name.endswith('.json'):
             if not output_name:
