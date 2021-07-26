@@ -1,5 +1,5 @@
 import argparse
-from . import gpxtofile
+from . import gpxtofile, VERBOSE
 
 
 def main():
@@ -13,7 +13,10 @@ def main():
                         help='output file name, optional',
                         default=None)
     parser.add_argument('-j', '--json', action='store_true', default=False)
+    parser.add_argument('-v', '--verbose', action='store_true', default=False)
+
     args = parser.parse_args()
+    VERBOSE = args.verbose
     gpxtofile(args.input_file, args.output_file, json=args.json)
 
 
