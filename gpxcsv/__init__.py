@@ -3,8 +3,6 @@ import csv
 import gzip
 import json
 
-VERBOSE = False
-
 
 def _strip_ns_prefix(tree):
     """strip the namespace prefixes from all elements in a tree"""
@@ -23,64 +21,6 @@ def _try_to_float(s):
         return s
 
 
-def _process_trackpoint(trackpoint, update_dict={}):
-    """Process a trackpoint element into a dictionary"""
-    ext_dict = {}
-    if trackpoint.find('extensions') is not None:
-        for extension in list(trackpoint.find('extensions')):
-            ext_dict.update({
-                x.tag: _try_to_float(x.text)
-                for x in extension.getchildren()
-            })
-    child_dict = {
-        x.tag: _try_to_float(x.text)
-        for x in trackpoint.getchildren() if x.tag != 'extensions'
-    }
-
-    final_dict = {
-        'lat': _try_to_float(trackpoint.attrib['lat']),
-        'lon': _try_to_float(trackpoint.attrib['lon']),
-    }
-    final_dict.update(ext_dict)
-    final_dict.update(update_dict)
-    final_dict.update(child_dict)
-    return final_dict
-
-
-def _check_verbose_print(msg):
-    """print a message if verbose is enabled"""
-    if VERBOSE:
-        print(msg)
-
-
-def _process_track(trk):
-    """process a trk element found in a gpx file"""
-    non_trkseg_dict = {
-        x.tag: x.text
-        for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
-    }
-    _check_verbose_print(f'Processing trk with tag info {non_trkseg_dict}')
-
-    all_trackpoints = []
-    all_tracksegments = trk.findall('trkseg')
-    num_segments = len(all_tracksegments)
-    if num_segments > 1:
-        _check_verbose_print(f'Found {num_segments} track segments')
-    for n, trkseg in enumerate(all_tracksegments):
-        if num_segments > 1:
-            non_trkseg_dict.update({'trkseg': n + 1})
-        temp_trackpoints = trkseg.findall('trkpt')
-
-        _check_verbose_print(
-            f'{len(temp_trackpoints)} trackpoints found in segment')
-        seg_trackpoints = [
-            _process_trackpoint(x, non_trkseg_dict)
-            for x in trkseg.findall('trkpt')
-        ]
-        all_trackpoints.extend(seg_trackpoints)
-    return all_trackpoints
-
-
 def _load_and_clean_gpx(gpx_file):
     """load a gpx file, clean up the name space, return the root of the lxml tree."""
     if gpx_file.endswith('.gz'):
@@ -92,59 +32,6 @@ def _load_and_clean_gpx(gpx_file):
     tree = _strip_ns_prefix(tree)
     etree.cleanup_namespaces(tree)
     return tree.getroot()
-
-
-def _process_tree_tracks(root):
-    """Input the lxml root, find all trks, and process them."""
-    tracks = root.findall('trk')
-    _check_verbose_print(f'Found {len(tracks)} tracks.')
-    all_trackpoints = []
-    for trk in tracks:
-        all_trackpoints.extend(_process_track(trk))
-    return all_trackpoints
-
-
-def _list_to_csv(list_of_dicts, csv_file):
-    """Process a list of dictionaries into a csv file"""
-    if not list_of_dicts:
-        print(
-            "No valid data to convert to csv. Please examine the gpx file directly."
-        )
-        return
-    header = {}
-    for d in list_of_dicts:
-        header = list(set(d.keys()).union(header))
-    header.sort()
-    with open(csv_file, 'w') as f:
-        mywriter = csv.DictWriter(f,
-                                  fieldnames=header,
-                                  quoting=csv.QUOTE_MINIMAL)
-        mywriter.writeheader()
-        for row in list_of_dicts:
-            mywriter.writerow(row)
-    if VERBOSE:
-        #leaving this in an if statement because of the column formatting for now
-        print(f'gpx file converted to {csv_file} with columns:')
-        for col in header:
-            print(f"  {col}")
-
-
-def _list_to_json(list_of_dicts, json_file):
-    """Process a list of dictionaries into a json file"""
-    if not list_of_dicts:
-        print(
-            "No valid data to convert to json. Please examine the gpx file directly."
-        )
-        return
-    with open(json_file, 'w', encoding='utf-8') as f:
-        json.dump(list_of_dicts, f, ensure_ascii=False, indent=4)
-
-
-def gpxtolist(gpxfile):
-    """Convert a gpx file to a list of dictionaries"""
-    root = _load_and_clean_gpx(gpxfile)
-    all_trackpoints = _process_tree_tracks(root)
-    return all_trackpoints
 
 
 def make_new_file_name(gpxfile, suffix):
@@ -159,15 +46,140 @@ def make_new_file_name(gpxfile, suffix):
     return output
 
 
-def gpxtofile(gpxfile, output_name=None, json=False):
-    """Convert a gpx file to a csv or json file"""
-
-    #this logic feels like it could be cleaner
-    if json:
-        if not output_name:
-            output_name = make_new_file_name(gpxfile, 'json')
-        _list_to_json(gpxtolist(gpxfile), output_name)
+def _list_to_json(list_of_dicts, json_file):
+    """Process a list of dictionaries into a json file"""
+    if not list_of_dicts:
+        print(
+            "No valid data to convert to json. Please examine the gpx file directly."
+        )
         return
-    if not output_name:
-        output_name = make_new_file_name(gpxfile, 'csv')
-    _list_to_csv(gpxtolist(gpxfile), output_name)
+    with open(json_file, 'w', encoding='utf-8') as f:
+        json.dump(list_of_dicts, f, ensure_ascii=False, indent=4)
+
+    def make_new_file_name(gpxfile, suffix):
+        """Make a new file name based on the old file name using the suffix"""
+        suffix = '.' + suffix
+        if gpxfile.endswith('gpx'):
+            output = gpxfile.replace('.gpx', suffix)
+        elif gpxfile.endswith('gpx.gz'):
+            output = gpxfile.replace('.gpx.gz', suffix)
+        else:
+            output = gpxfile + suffix
+        return output
+
+
+class GpxCSV():
+    """A class to convert a gpx file to a csv file"""
+    verbose = None
+
+    def __init__(self, verbose=False) -> None:
+        self.verbose = verbose
+
+    @staticmethod
+    def _process_trackpoint(trackpoint, update_dict={}):
+        """Process a trackpoint element into a dictionary"""
+        ext_dict = {}
+        if trackpoint.find('extensions') is not None:
+            for extension in list(trackpoint.find('extensions')):
+                ext_dict.update({
+                    x.tag: _try_to_float(x.text)
+                    for x in extension.getchildren()
+                })
+        child_dict = {
+            x.tag: _try_to_float(x.text)
+            for x in trackpoint.getchildren() if x.tag != 'extensions'
+        }
+
+        final_dict = {
+            'lat': _try_to_float(trackpoint.attrib['lat']),
+            'lon': _try_to_float(trackpoint.attrib['lon']),
+        }
+        final_dict.update(ext_dict)
+        final_dict.update(update_dict)
+        final_dict.update(child_dict)
+        return final_dict
+
+    def _check_verbose_print(self, msg):
+        """print a message if verbose is enabled"""
+        if self.verbose:
+            print(msg)
+
+    def _process_track(self, trk):
+        """process a trk element found in a gpx file"""
+        non_trkseg_dict = {
+            x.tag: x.text
+            for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
+        }
+        self._check_verbose_print(
+            f'Processing trk with tag info {non_trkseg_dict}')
+
+        all_trackpoints = []
+        all_tracksegments = trk.findall('trkseg')
+        num_segments = len(all_tracksegments)
+        if num_segments > 1:
+            self._check_verbose_print(f'Found {num_segments} track segments')
+        for n, trkseg in enumerate(all_tracksegments):
+            if num_segments > 1:
+                non_trkseg_dict.update({'trkseg': n + 1})
+            temp_trackpoints = trkseg.findall('trkpt')
+
+            self._check_verbose_print(
+                f'{len(temp_trackpoints)} trackpoints found in segment')
+            seg_trackpoints = [
+                self._process_trackpoint(x, non_trkseg_dict)
+                for x in trkseg.findall('trkpt')
+            ]
+            all_trackpoints.extend(seg_trackpoints)
+        return all_trackpoints
+
+    def _process_tree_tracks(self, root):
+        """Input the lxml root, find all trks, and process them."""
+        tracks = root.findall('trk')
+        self._check_verbose_print(f'Found {len(tracks)} tracks.')
+        all_trackpoints = []
+        for trk in tracks:
+            all_trackpoints.extend(self._process_track(trk))
+        return all_trackpoints
+
+    def _list_to_csv(self, list_of_dicts, csv_file):
+        """Process a list of dictionaries into a csv file"""
+        if not list_of_dicts:
+            print(
+                "No valid data to convert to csv. Please examine the gpx file directly."
+            )
+            return
+        header = {}
+        for d in list_of_dicts:
+            header = list(set(d.keys()).union(header))
+        header.sort()
+        with open(csv_file, 'w') as f:
+            mywriter = csv.DictWriter(f,
+                                      fieldnames=header,
+                                      quoting=csv.QUOTE_MINIMAL)
+            mywriter.writeheader()
+            for row in list_of_dicts:
+                mywriter.writerow(row)
+        if self.verbose:
+            #leaving this in an if statement because of the column formatting for now
+            print(f'gpx file converted to {csv_file} with columns:')
+            for col in header:
+                print(f"  {col}")
+
+    def gpxtolist(self, gpxfile):
+        """Convert a gpx file to a list of dictionaries"""
+        root = _load_and_clean_gpx(gpxfile)
+        all_trackpoints = self._process_tree_tracks(root)
+        return all_trackpoints
+
+    def gpxtofile(self, gpxfile, output_name=None, json=False):
+        """Convert a gpx file to a csv or json file"""
+
+        #this logic feels like it could be cleaner
+        if json or output_name.endswith('.json'):
+            if not output_name:
+                output_name = make_new_file_name(gpxfile, 'json')
+            _list_to_json(self.gpxtolist(gpxfile), output_name)
+            return
+        if not output_name:
+            output_name = make_new_file_name(gpxfile, 'csv')
+        self._list_to_csv(self.gpxtolist(gpxfile), output_name)

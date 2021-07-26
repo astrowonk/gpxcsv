@@ -1,5 +1,5 @@
 import argparse
-from . import gpxtofile, VERBOSE
+from . import GpxCSV
 
 
 def main():
@@ -17,7 +17,10 @@ def main():
 
     args = parser.parse_args()
     VERBOSE = args.verbose
-    gpxtofile(args.input_file, args.output_file, json=args.json)
+
+    GpxCSV(verbose=args.verbose).gpxtofile(args.input_file,
+                                           args.output_file,
+                                           json=args.json)
 
 
 if __name__ == '__main__':
