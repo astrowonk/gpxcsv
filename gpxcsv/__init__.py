@@ -124,7 +124,7 @@ class GpxCSV():
             temp_trackpoints = trkseg.findall('trkpt')
 
             self._check_verbose_print(
-                f'{len(temp_trackpoints)} trackpoints found in segment')
+                f'{len(temp_trackpoints)} trackpoints found in segment {n+1}')
             seg_trackpoints = [
                 self._process_trackpoint(x, non_trkseg_dict)
                 for x in trkseg.findall('trkpt')
@@ -135,7 +135,7 @@ class GpxCSV():
     def _process_tree_tracks(self, root):
         """Input the lxml root, find all trks, and process them."""
         tracks = root.findall('trk')
-        self._check_verbose_print(f'Found {len(tracks)} tracks.')
+        self._check_verbose_print(f'Found {len(tracks)} tracks')
         all_trackpoints = []
         for trk in tracks:
             all_trackpoints.extend(self._process_track(trk))
@@ -184,3 +184,17 @@ class GpxCSV():
         if not output_name:
             output_name = make_new_file_name(gpxfile, 'csv')
         self._list_to_csv(self.gpxtolist(gpxfile), output_name)
+
+
+def gpxtolist(gpxfile, verbose=False):
+    """wrapper for GpxCSV.gpxtolist"""
+    return GpxCSV(verbose=verbose).gpxtolist(gpxfile)
+
+
+def gpxtofile(
+    *args,
+    verbose=False,
+    **kwargs,
+):
+    """Wrapper for GpxCSV.gpxtofile"""
+    GpxCSV(verbose=verbose).gpxtofile(*args, **kwargs)
