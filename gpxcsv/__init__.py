@@ -47,23 +47,32 @@ def _process_trackpoint(trackpoint, update_dict={}):
     return final_dict
 
 
+def _check_verbose_print(msg):
+    """print a message if verbose is enabled"""
+    if VERBOSE:
+        print(msg)
+
+
 def _process_track(trk):
     """process a trk element found in a gpx file"""
     non_trkseg_dict = {
         x.tag: x.text
         for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
     }
-    if VERBOSE:
-        print(f'Processing trk with tag info {non_trkseg_dict}')
+    _check_verbose_print(f'Processing trk with tag info {non_trkseg_dict}')
 
     all_trackpoints = []
     all_tracksegments = trk.findall('trkseg')
-    print(f'Found {len(all_tracksegments)} segments')
+    num_segments = len(all_tracksegments)
+    if num_segments > 1:
+        _check_verbose_print(f'Found {num_segments} track segments')
     for n, trkseg in enumerate(all_tracksegments):
-        if len(all_tracksegments) > 1:
+        if num_segments > 1:
             non_trkseg_dict.update({'trkseg': n + 1})
         temp_trackpoints = trkseg.findall('trkpt')
-        print(f'{len(temp_trackpoints)} trackpoints found in segment')
+
+        _check_verbose_print(
+            f'{len(temp_trackpoints)} trackpoints found in segment')
         seg_trackpoints = [
             _process_trackpoint(x, non_trkseg_dict)
             for x in trkseg.findall('trkpt')
@@ -88,7 +97,7 @@ def _load_and_clean_gpx(gpx_file):
 def _process_tree_tracks(root):
     """Input the lxml root, find all trks, and process them."""
     tracks = root.findall('trk')
-    print(f'Found {len(tracks)} tracks.')
+    _check_verbose_print(f'Found {len(tracks)} tracks.')
     all_trackpoints = []
     for trk in tracks:
         all_trackpoints.extend(_process_track(trk))
@@ -104,7 +113,8 @@ def _list_to_csv(list_of_dicts, csv_file):
         return
     header = {}
     for d in list_of_dicts:
-        header = sorted(list(set(d.keys()).union(header)))
+        header = list(set(d.keys()).union(header))
+    header.sort()
     with open(csv_file, 'w') as f:
         mywriter = csv.DictWriter(f,
                                   fieldnames=header,
@@ -112,6 +122,11 @@ def _list_to_csv(list_of_dicts, csv_file):
         mywriter.writeheader()
         for row in list_of_dicts:
             mywriter.writerow(row)
+    if VERBOSE:
+        #leaving this in an if statement because of the column formatting for now
+        print(f'gpx file converted to {csv_file} with columns:')
+        for col in header:
+            print(f"  {col}")
 
 
 def _list_to_json(list_of_dicts, json_file):
