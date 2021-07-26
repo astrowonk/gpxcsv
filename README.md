@@ -58,7 +58,7 @@ df = pd.DataFrame(gpx_list)
 
 ```
 
-## Test CSV files
+## Test GPX files
 
 I tested the conversion against a handful of my own GPX files (exported from Apple Health / Apple Watch via the excellent [HealthFit app](https://apps.apple.com/us/app/healthfit/id1202650514)).
 
