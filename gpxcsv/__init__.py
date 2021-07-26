@@ -3,6 +3,8 @@ import csv
 import gzip
 import json
 
+VERBOSE = False
+
 
 def _strip_ns_prefix(tree):
     """strip the namespace prefixes from all elements in a tree"""
@@ -51,8 +53,17 @@ def _process_track(trk):
         x.tag: x.text
         for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
     }
+    if VERBOSE:
+        print(f'Processing trk with tag info {non_trkseg_dict}')
+
     all_trackpoints = []
-    for trkseg in trk.findall('trkseg'):
+    all_tracksegments = trk.findall('trkseg')
+    print(f'Found {len(all_tracksegments)} segments')
+    for n, trkseg in enumerate(all_tracksegments):
+        if len(all_tracksegments) > 1:
+            non_trkseg_dict.update({'trkseg': n + 1})
+        temp_trackpoints = trkseg.findall('trkpt')
+        print(f'{len(temp_trackpoints)} trackpoints found in segment')
         seg_trackpoints = [
             _process_trackpoint(x, non_trkseg_dict)
             for x in trkseg.findall('trkpt')
@@ -77,6 +88,7 @@ def _load_and_clean_gpx(gpx_file):
 def _process_tree_tracks(root):
     """Input the lxml root, find all trks, and process them."""
     tracks = root.findall('trk')
+    print(f'Found {len(tracks)} tracks.')
     all_trackpoints = []
     for trk in tracks:
         all_trackpoints.extend(_process_track(trk))
