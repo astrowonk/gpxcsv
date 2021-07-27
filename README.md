@@ -1,5 +1,9 @@
 # GPX to CSV conversion (or to a Python list)
 
+[![Downloads](https://static.pepy.tech/personalized-badge/gpxcsv?period=total&units=international_system&left_color=lightgrey&right_color=blue&left_text=Downloads)](https://pepy.tech/project/gpxcsv).
+
+[PyPi link](https://pypi.org/project/gpxcsv/) )
+
 This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It supports multiple `<trk>` entries per file, multiple `<trkseg>` segments.
 
 ## Advantages / Features
