@@ -46,34 +46,14 @@ def make_new_file_name(gpxfile, suffix):
     return output
 
 
-def _list_to_json(list_of_dicts, json_file):
-    """Process a list of dictionaries into a json file"""
-    if not list_of_dicts:
-        print(
-            "No valid data to convert to json. Please examine the gpx file directly."
-        )
-        return
-    with open(json_file, 'w', encoding='utf-8') as f:
-        json.dump(list_of_dicts, f, ensure_ascii=False, indent=4)
-
-    def make_new_file_name(gpxfile, suffix):
-        """Make a new file name based on the old file name using the suffix"""
-        suffix = '.' + suffix
-        if gpxfile.endswith('gpx'):
-            output = gpxfile.replace('.gpx', suffix)
-        elif gpxfile.endswith('gpx.gz'):
-            output = gpxfile.replace('.gpx.gz', suffix)
-        else:
-            output = gpxfile + suffix
-        return output
-
-
 class GpxCSV():
     """A class to convert a gpx file to a csv file"""
     verbose = None
+    silent = None
 
-    def __init__(self, verbose=False) -> None:
+    def __init__(self, verbose=False, silent=False) -> None:
         self.verbose = verbose
+        self.silent = silent
 
     @staticmethod
     def _process_trackpoint(trackpoint, update_dict={}):
@@ -99,9 +79,9 @@ class GpxCSV():
         final_dict.update(child_dict)
         return final_dict
 
-    def _check_verbose_print(self, msg):
-        """print a message if verbose is enabled"""
-        if self.verbose:
+    def _check_verbose_print(self, msg, force=False):
+        """print a message if verbose is enabled and not silent"""
+        if not self.silent and self.verbose or (force and not self.silent):
             print(msg)
 
     def _process_track(self, trk):
@@ -141,6 +121,19 @@ class GpxCSV():
             all_trackpoints.extend(self._process_track(trk))
         return all_trackpoints
 
+    def _list_to_json(self, list_of_dicts, json_file):
+        """Process a list of dictionaries into a json file"""
+        if not list_of_dicts:
+            print(
+                "No valid data to convert to json. Please examine the gpx file directly."
+            )
+            return
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(list_of_dicts, f, ensure_ascii=False, indent=4)
+        self._check_verbose_print(
+            f"JSON written to {json_file} with {len(list_of_dicts)} records.",
+            True)
+
     def _list_to_csv(self, list_of_dicts, csv_file):
         """Process a list of dictionaries into a csv file"""
         if not list_of_dicts:
@@ -159,6 +152,9 @@ class GpxCSV():
             mywriter.writeheader()
             for row in list_of_dicts:
                 mywriter.writerow(row)
+        self._check_verbose_print(
+            f"CSV {csv_file} written with {len(list_of_dicts)} rows",
+            force=True)
         if self.verbose:
             #leaving this in an if statement because of the column formatting for now
             print(f'gpx file converted to {csv_file} with columns:')
@@ -179,7 +175,8 @@ class GpxCSV():
         if json or (output_name is not None and output_name.endswith('.json')):
             if not output_name:
                 output_name = make_new_file_name(gpxfile, 'json')
-            _list_to_json(self.gpxtolist(gpxfile), output_name)
+            self._list_to_json(self.gpxtolist(gpxfile), output_name)
+
             return
         if not output_name:
             output_name = make_new_file_name(gpxfile, 'csv')
