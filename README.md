@@ -32,7 +32,7 @@ python setup.py install
 2. Use directly with command line tool or as a python module. The following examples will create `myrun.csv`
 ```
 gpxcsv myrun.gpx
-python -m myrun.gpx
+python -m gpxcsv myrun.gpx
 ```
 Or specify an output file name
 ```
