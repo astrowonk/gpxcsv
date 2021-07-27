@@ -29,14 +29,21 @@ def main():
                         action='store_true',
                         default=False,
                         help='Turn on verbose mode')
+    parser.add_argument(
+        '-s',
+        '--silent',
+        action='store_true',
+        default=False,
+        help='Turn off all printed output (except errors/asserts)')
 
     args = parser.parse_args()
     all_files = []
     for arg in args.input_file:
         all_files += glob.glob(arg)
-    GpxCSV(verbose=args.verbose).gpxtofile(all_files,
-                                           args.output_file,
-                                           json=args.json)
+    GpxCSV(verbose=args.verbose,
+           silent=args.silent).gpxtofile(all_files,
+                                         args.output_file,
+                                         json=args.json)
 
 
 if __name__ == '__main__':
