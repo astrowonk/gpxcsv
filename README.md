@@ -8,7 +8,7 @@ This tool can convert most gpx files to csv format. It preserves trackpoint exte
 
 * **Minimal dependencies:** Only requires lxml.
 
-* **Easy command line usage:** `gpxcsv file.gpx` and you're done.
+* **Easy command line usage:** `gpxcsv file.gpx` and done.
 
 * **Preserves and identifies multi-trk or multi-trkseg data:** Because `trk` and `trkseg` level tags get their own ID columns, multi-track or segment files preserve each segment or track as distinguishable.
 
