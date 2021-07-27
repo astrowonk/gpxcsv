@@ -171,12 +171,12 @@ class GpxCSV():
         all_trackpoints = self._process_tree_tracks(root)
         return all_trackpoints
 
-    def gpxtofile(self, gpxfile, output_name=None, json=False):
+    def _gpxtofile(self, gpxfile, output_name=None, json=False):
         """Convert a gpx file to a csv or json file"""
         assert gpxfile.endswith('.gpx') or gpxfile.endswith(
             '.gpx.gz'), 'File must be gpx or gpx.gz'
         #this logic feels like it could be cleaner
-        if json or output_name.endswith('.json'):
+        if json or (output_name is not None and output_name.endswith('.json')):
             if not output_name:
                 output_name = make_new_file_name(gpxfile, 'json')
             _list_to_json(self.gpxtolist(gpxfile), output_name)
@@ -184,6 +184,13 @@ class GpxCSV():
         if not output_name:
             output_name = make_new_file_name(gpxfile, 'csv')
         self._list_to_csv(self.gpxtolist(gpxfile), output_name)
+
+    def gpxtofile(self, gpxfile, output_name=None, json=False):
+        """Convert a gpx file to a csv or json file"""
+        self._check_verbose_print(f"Converting: {gpxfile}")
+        for file in gpxfile:
+            if file:
+                self._gpxtofile(file, output_name, json)
 
 
 def gpxtolist(gpxfile, verbose=False):

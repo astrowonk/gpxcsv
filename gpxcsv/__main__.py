@@ -4,9 +4,12 @@ from . import GpxCSV
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file',
-                        type=str,
-                        help='input gpx file, may be .gpx or gzipped .gpx.gz')
+    parser.add_argument(
+        'input_file',
+        nargs='+',
+        help=
+        'input gpx file, may be .gpx or gzipped .gpx.gz. Can pass a wildcard like *.gpx'
+    )
     parser.add_argument(
         '-o',
         '--output-file',
@@ -27,7 +30,6 @@ def main():
 
     args = parser.parse_args()
     VERBOSE = args.verbose
-
     GpxCSV(verbose=args.verbose).gpxtofile(args.input_file,
                                            args.output_file,
                                            json=args.json)

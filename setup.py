@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gpxcsv",
-    version="0.2.4",
+    version="0.2.5",
     author="Marcos Huerta",
     author_email="marcos@marcoshuerta.com",
     description="Convert Garmin GPX file to CSV or simple JSON",
