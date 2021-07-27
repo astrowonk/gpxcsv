@@ -64,14 +64,13 @@ I tested the conversion against a handful of my own GPX files (exported from App
 
 In addition I used several files from this [sample-gpx repository](https://github.com/gps-touring/sample-gpx), specifically:
 
-* bogus_basin.gpx
 * Alt_Portsmouth.gpx
 * MoselradwegAusWiki.gpx
 * VoieVerteHauteVosges.gpx
 
 as well as all the test files from [gpxpy](https://github.com/tkrajina/gpxpy/tree/dev/test_files). Many of those intentionally lack any coherent flow of `trk -> trkseg -> trkpt` so they don't produce a valid csv file.
 
-The __bogus_basin__ file is a good example of conversion of multiple `trk` files. Though, the design case was more a single workout tracked with an Apple Watch (as that's the data I'm interested in myself.)
+I also used a __bogus_basin__ file ([src](https://raw.githubusercontent.com/FrancescoRigoni/Android_GPX_SampleProject/master/app/src/main/assets/bogus_basin.gpx)) which is a good example of conversion of multiple `trk` files. Though, the design case was more a single workout tracked with an Apple Watch (as that's the data I'm interested in myself.)
 
 ## Example Input and Output:
 
