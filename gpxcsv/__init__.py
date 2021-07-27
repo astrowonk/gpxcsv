@@ -188,6 +188,8 @@ class GpxCSV():
     def gpxtofile(self, gpxfile, output_name=None, json=False):
         """Convert a gpx file to a csv or json file"""
         self._check_verbose_print(f"Converting: {gpxfile}")
+        if len(gpxfile) > 1:
+            assert not output_name, "Can't use wildcard and an output name."
         for file in gpxfile:
             if file:
                 self._gpxtofile(file, output_name, json)
