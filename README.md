@@ -43,7 +43,7 @@ Or, even though I named this gpxcsv, convert to a simple json file:
 
 ```python
 gpxcsv myrun.gpx --json
-python -m myrun.gpx -j
+python -m gpxcsv myrun.gpx -j
 ```
 
 3. Use the `gpxtolist` function to read the gpx file into a python list suitable for conversion into a pandas dataframe in a notebook or iPython.
