@@ -8,13 +8,14 @@ This tool can convert most gpx files to csv format. It preserves trackpoint exte
 
 * **Minimal dependencies:** Only requires lxml.
 
-* **Easy command line usage:** `gpxcsv file.gpx` and done.
+* **Easy command line usage with wildcards:** `gpxcsv file.gpx` and done. `gpxcsv *.gpx` just works.
 
 * **Preserves and identifies multi-trk or multi-trkseg data:** Because `trk` and `trkseg` level tags get their own ID columns, multi-track or segment files preserve each segment or track as distinguishable.
 
 * **Easily create Pandas dataframe:** Function to create a python list for one-line conversation to a dataframe: `pd.DataFrame(gpxtolist('myfile.gpx'))`
 
 * **Supports JSON (even though I named the package gpxcsv):** JSON support since it was easy from the list of dictionaries.
+
 
 ## Installation and Usage
 
