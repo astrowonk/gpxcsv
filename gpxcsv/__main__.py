@@ -1,8 +1,10 @@
+import glob
 import argparse
 from . import GpxCSV
 
 
 def main():
+    """Main function for command line utility"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'input_file',
@@ -29,8 +31,10 @@ def main():
                         help='Turn on verbose mode')
 
     args = parser.parse_args()
-    VERBOSE = args.verbose
-    GpxCSV(verbose=args.verbose).gpxtofile(args.input_file,
+    all_files = []
+    for arg in args.input_file:
+        all_files += glob.glob(arg)
+    GpxCSV(verbose=args.verbose).gpxtofile(all_files,
                                            args.output_file,
                                            json=args.json)
 
