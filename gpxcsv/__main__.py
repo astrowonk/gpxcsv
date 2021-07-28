@@ -1,11 +1,20 @@
 import glob
 import argparse
+import sys
+
 from . import GpxCSV
+
+
+class MyParser(argparse.ArgumentParser):
+    def error(self, message):
+        sys.stderr.write('error: %s\n' % message)
+        self.print_help()
+        sys.exit(2)
 
 
 def main():
     """Main function for command line utility"""
-    parser = argparse.ArgumentParser()
+    parser = MyParser()
     parser.add_argument(
         'input_file',
         nargs='+',

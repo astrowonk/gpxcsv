@@ -153,7 +153,7 @@ class GpxCSV():
             for row in list_of_dicts:
                 mywriter.writerow(row)
         self._check_verbose_print(
-            f"CSV {csv_file} written with {len(list_of_dicts)} rows",
+            f"CSV {csv_file} written to {csv_file} with {len(list_of_dicts)} rows",
             force=True)
         if self.verbose:
             #leaving this in an if statement because of the column formatting for now
