@@ -1,9 +1,6 @@
 import glob
 import argparse
 import sys
-
-from sqlalchemy import all_
-
 from . import GpxCSV
 
 
