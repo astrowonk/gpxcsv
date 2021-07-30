@@ -2,6 +2,8 @@ import glob
 import argparse
 import sys
 
+from sqlalchemy import all_
+
 from . import GpxCSV
 
 
@@ -45,14 +47,24 @@ def main():
         default=False,
         help='Turn off all printed output (except errors/asserts)')
 
+    parser.add_argument(
+        '-r',
+        '--raise-errors',
+        action='store_true',
+        default=False,
+        help='Stop processing / Assert if encountering a non .gpx file')
+
     args = parser.parse_args()
     all_files = []
     for arg in args.input_file:
         all_files += glob.glob(arg)
-    GpxCSV(verbose=args.verbose,
-           silent=args.silent).gpxtofile(all_files,
-                                         args.output_file,
-                                         json=args.json)
+    assert all_files, 'File or files not found'
+    if args.raise_errors:
+        error = 'errors'
+    else:
+        error = 'ignore'
+    GpxCSV(verbose=args.verbose, silent=args.silent,
+           errors=error).gpxtofile(all_files, args.output_file, json=args.json)
 
 
 if __name__ == '__main__':

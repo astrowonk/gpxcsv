@@ -50,10 +50,12 @@ class GpxCSV():
     """A class to convert a gpx file to a csv file"""
     verbose = None
     silent = None
+    errors = None
 
-    def __init__(self, verbose=False, silent=False) -> None:
+    def __init__(self, verbose=False, silent=False, errors='ignore') -> None:
         self.verbose = verbose
         self.silent = silent
+        self.errors = errors
 
     @staticmethod
     def _process_trackpoint(trackpoint, update_dict={}):
@@ -163,14 +165,18 @@ class GpxCSV():
 
     def gpxtolist(self, gpxfile):
         """Convert a gpx file to a list of dictionaries"""
+        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx')
+                                            or gpxfile.endswith('.gpx.gz')):
+            return []
+        assert gpxfile.endswith('.gpx') or gpxfile.endswith(
+            '.gpx.gz'), 'File must be gpx or gpx.gz'
         root = _load_and_clean_gpx(gpxfile)
         all_trackpoints = self._process_tree_tracks(root)
         return all_trackpoints
 
     def _gpxtofile(self, gpxfile, output_name=None, json=False):
         """Convert a gpx file to a csv or json file"""
-        assert gpxfile.endswith('.gpx') or gpxfile.endswith(
-            '.gpx.gz'), 'File must be gpx or gpx.gz'
+
         #this logic feels like it could be cleaner
         if json or (output_name is not None and output_name.endswith('.json')):
             if not output_name:
@@ -192,15 +198,16 @@ class GpxCSV():
                 self._gpxtofile(file, output_name, json)
 
 
-def gpxtolist(gpxfile, verbose=False):
+def gpxtolist(gpxfile, verbose=False, errors='ignore'):
     """wrapper for GpxCSV.gpxtolist"""
-    return GpxCSV(verbose=verbose).gpxtolist(gpxfile)
+    return GpxCSV(verbose=verbose, errors=errors).gpxtolist(gpxfile)
 
 
 def gpxtofile(
     *args,
     verbose=False,
+    errors='ignore',
     **kwargs,
 ):
     """Wrapper for GpxCSV.gpxtofile"""
-    GpxCSV(verbose=verbose).gpxtofile(*args, **kwargs)
+    GpxCSV(verbose=verbose, errors=errors).gpxtofile(*args, **kwargs)
