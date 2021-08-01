@@ -73,13 +73,11 @@ class GpxCSV():
             x.tag: _try_to_float(x.text)
             for x in trackpoint.getchildren() if x.tag != 'extensions'
         }
-        if trackpoint.attrib.get('lat'):
-            final_dict = {
-                'lat': _try_to_float(trackpoint.attrib.get('lat')),
-                'lon': _try_to_float(trackpoint.attrib.get('lon')),
-            }
-        else:
-            final_dict = {}
+        final_dict = {
+            key: _try_to_float(val)
+            for key, val in trackpoint.attrib.items()
+        }
+
         final_dict.update(ext_dict)
         final_dict.update(update_dict)
         final_dict.update(child_dict)
