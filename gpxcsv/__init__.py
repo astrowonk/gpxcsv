@@ -3,7 +3,7 @@ import csv
 import gzip
 import json
 
-__VERSION__ = '0.2.9'
+__VERSION__ = '0.2.10'
 
 
 def _strip_ns_prefix(tree):
@@ -19,7 +19,7 @@ def _try_to_float(s):
     """convert string to float or leave as string"""
     try:
         return float(s)
-    except ValueError:
+    except (ValueError, TypeError):
         return s
 
 
@@ -71,11 +71,11 @@ class GpxCSV():
                 })
         child_dict = {
             x.tag: _try_to_float(x.text)
-            for x in trackpoint.getchildren() if x.tag != 'extensions'
+            for x in trackpoint.getchildren()
+            if x.tag != 'extensions'
         }
         final_dict = {
-            key: _try_to_float(val)
-            for key, val in trackpoint.attrib.items()
+            key: _try_to_float(val) for key, val in trackpoint.attrib.items()
         }
 
         final_dict.update(ext_dict)
@@ -167,8 +167,8 @@ class GpxCSV():
 
     def gpxtolist(self, gpxfile):
         """Convert a gpx file to a list of dictionaries"""
-        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx')
-                                            or gpxfile.endswith('.gpx.gz')):
+        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx') or
+                                            gpxfile.endswith('.gpx.gz')):
             return []
         assert gpxfile.endswith('.gpx') or gpxfile.endswith(
             '.gpx.gz'), 'File must be gpx or gpx.gz'
