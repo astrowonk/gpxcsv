@@ -64,6 +64,20 @@ df = pd.DataFrame(gpx_list)
 
 ```
 
+## Release Notes
+
+### 0.2.9
+
+* Changed the way attribs are pulled from trackpoints. Code will not crash if trackpoint is missing lat or lon. (Obviously this shouldn't happen, but occurs in some exported workouts from Apple Watch that are missing GPS data.)
+
+### 0.2.8
+
+* Fixed a crashing bug because of an unneccessary import accidentally auto-added.
+
+* Added 0.2.7 fixes, which includes the --silent flag and better handling of missing files (skipping processing them rather than an assert error)
+
+
+
 ## Test GPX files
 
 I tested the conversion against a handful of my own GPX files (exported from Apple Health / Apple Watch via the excellent [HealthFit app](https://apps.apple.com/us/app/healthfit/id1202650514)).
