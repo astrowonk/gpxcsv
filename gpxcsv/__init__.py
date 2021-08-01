@@ -3,6 +3,8 @@ import csv
 import gzip
 import json
 
+__VERSION__ = '0.2.9'
+
 
 def _strip_ns_prefix(tree):
     """strip the namespace prefixes from all elements in a tree"""
