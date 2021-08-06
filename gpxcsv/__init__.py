@@ -2,8 +2,9 @@ from lxml import etree
 import csv
 import gzip
 import json
+from io import StringIO
 
-__VERSION__ = '0.2.10'
+__VERSION__ = '0.2.12'
 
 
 def _strip_ns_prefix(tree):
@@ -25,7 +26,10 @@ def _try_to_float(s):
 
 def _load_and_clean_gpx(gpx_file):
     """load a gpx file, clean up the name space, return the root of the lxml tree."""
-    if gpx_file.endswith('.gz'):
+
+    if isinstance(gpx_file, StringIO):
+        tree = etree.fromstring(gpx_file.getvalue())
+    elif gpx_file.endswith('.gz'):
         with gzip.open(gpx_file, 'rb') as f:
             tree = etree.parse(f)
     else:
@@ -71,11 +75,11 @@ class GpxCSV():
                 })
         child_dict = {
             x.tag: _try_to_float(x.text)
-            for x in trackpoint.getchildren()
-            if x.tag != 'extensions'
+            for x in trackpoint.getchildren() if x.tag != 'extensions'
         }
         final_dict = {
-            key: _try_to_float(val) for key, val in trackpoint.attrib.items()
+            key: _try_to_float(val)
+            for key, val in trackpoint.attrib.items()
         }
 
         final_dict.update(ext_dict)
@@ -167,8 +171,8 @@ class GpxCSV():
 
     def gpxtolist(self, gpxfile):
         """Convert a gpx file to a list of dictionaries"""
-        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx') or
-                                            gpxfile.endswith('.gpx.gz')):
+        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx')
+                                            or gpxfile.endswith('.gpx.gz')):
             return []
         assert gpxfile.endswith('.gpx') or gpxfile.endswith(
             '.gpx.gz'), 'File must be gpx or gpx.gz'
