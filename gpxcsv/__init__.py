@@ -28,7 +28,7 @@ def _load_and_clean_gpx(gpx_file):
     """load a gpx file, clean up the name space, return the root of the lxml tree."""
 
     if isinstance(gpx_file, StringIO):
-        tree = etree.fromstring(gpx_file.getvalue())
+        tree = etree.fromstring(gpx_file.getvalue().encode('ascii'))
     elif gpx_file.endswith('.gz'):
         with gzip.open(gpx_file, 'rb') as f:
             tree = etree.parse(f)
@@ -37,7 +37,9 @@ def _load_and_clean_gpx(gpx_file):
             tree = etree.parse(f)
     tree = _strip_ns_prefix(tree)
     etree.cleanup_namespaces(tree)
-    return tree.getroot()
+    if isinstance(tree, etree._ElementTree):
+        return tree.getroot()
+    return tree
 
 
 def make_new_file_name(gpxfile, suffix):
@@ -171,11 +173,13 @@ class GpxCSV():
 
     def gpxtolist(self, gpxfile):
         """Convert a gpx file to a list of dictionaries"""
-        if self.errors == 'ignore' and not (gpxfile.endswith('.gpx')
-                                            or gpxfile.endswith('.gpx.gz')):
+        if self.errors == 'ignore' and isinstance(
+                gpxfile, str) and not (gpxfile.endswith('.gpx')
+                                       or gpxfile.endswith('.gpx.gz')):
             return []
-        assert gpxfile.endswith('.gpx') or gpxfile.endswith(
-            '.gpx.gz'), 'File must be gpx or gpx.gz'
+        assert isinstance(
+            gpxfile, StringIO) or gpxfile.endswith('.gpx') or gpxfile.endswith(
+                '.gpx.gz'), 'File must be gpx or gpx.gz'
         root = _load_and_clean_gpx(gpxfile)
         all_trackpoints = self._process_tree_tracks(root)
         return all_trackpoints
