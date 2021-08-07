@@ -4,7 +4,7 @@ import gzip
 import json
 from io import StringIO
 
-__VERSION__ = '0.2.11'
+__VERSION__ = '0.2.13'
 
 
 def _strip_ns_prefix(tree):
@@ -29,7 +29,7 @@ def _load_and_clean_gpx(gpx_file):
 
     if isinstance(gpx_file, StringIO):
         tree = etree.fromstring(gpx_file.getvalue().encode('ascii'))
-    elif gpx_file.endswith('.gz'):1
+    elif gpx_file.endswith('.gz'):
         with gzip.open(gpx_file, 'rb') as f:
             tree = etree.parse(f)
     else:
