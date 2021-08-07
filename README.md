@@ -4,7 +4,7 @@
 
 [PyPi Project Page](https://pypi.org/project/gpxcsv/) 
 
-This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It supports multiple `<trk>` entries per file, multiple `<trkseg>` segments.
+This tool can convert most gpx files to csv format. It preserves trackpoint extensions and `trk` level tags. It supports multiple `<trk>` entries per file, multiple `<trkseg>` segments. It powers [gpxrun](https://github.com/astrowonk/gpxrun) and [my gpx analysis web app](https://marcoshuerta.com/gpxrun/).
 
 ## Advantages / Features
 
@@ -66,6 +66,13 @@ df = pd.DataFrame(gpx_list)
 
 ## Release Notes
 
+### 0.2.11
+
+* Adds support for processing a `StringIo` object, which was necessary to use this code as the backend for a Dash web app, which encodes all files as base64 strings.
+
+### 0.2.10
+
+* The _try_to_float function no longer crashes when trying to floatify None. This was happening due to some odd xml in Runalyze exported GPX files.
 ### 0.2.9
 
 * Changed the way attribs are pulled from trackpoints. Code will not crash if trackpoint is missing lat or lon. (Obviously this shouldn't happen, but occurs in some exported workouts from Apple Watch that are missing GPS data.)
