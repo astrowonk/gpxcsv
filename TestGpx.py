@@ -27,13 +27,13 @@ class TestGpx(unittest.TestCase):
         with open('myfile.gpx', 'r') as f:
             strio = StringIO(f.read())
         theList = GpxCSV().gpxtolist(strio)
-        self.assertTrue(theList[0]['ele'] == 51.820438)
+        self.assertTrue(theList[0]['ele'] == 50.003891)
 
     def test_gpx_to_list(self):
         """Test the gpx to list"""
         g = GpxCSV()
         theList = g.gpxtolist('myfile.gpx')
-        self.assertAlmostEqual(theList[0]['ele'], 51.820438)
+        self.assertAlmostEqual(theList[0]['ele'], 50.003891)
 
     def test_multi_segment(self):
         """test multi segment support"""
@@ -68,4 +68,4 @@ class TestGpx(unittest.TestCase):
         gpxtofile('myfile.gpx')
         self.assertTrue(os.path.exists('myfile.csv'))
         out = gpxtolist('myfile.gpx')
-        self.assertAlmostEqual(out[0]['ele'], 51.820438)
+        self.assertAlmostEqual(out[0]['ele'], 50.003891)
