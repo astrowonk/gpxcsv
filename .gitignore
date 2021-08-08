@@ -11,3 +11,4 @@ dist
 *.json
 *.log
 .vscode
+.coverage
