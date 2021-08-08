@@ -7,6 +7,11 @@ from io import StringIO
 
 class TestGpx(unittest.TestCase):
     """Unit test the class"""
+    @classmethod
+    def setUpClass(cls) -> None:
+        """set up test files"""
+        os.chdir('./Tests')
+
     def test_gpx_to_file(self):
         """Test the gpx to file"""
         for file in glob('*.csv') + glob('*.json'):
