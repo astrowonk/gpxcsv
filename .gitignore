@@ -12,3 +12,4 @@ dist
 *.log
 .vscode
 .coverage
+htmlcov/
