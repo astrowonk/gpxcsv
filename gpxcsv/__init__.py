@@ -49,8 +49,6 @@ def make_new_file_name(gpxfile, suffix):
         output = gpxfile.replace('.gpx', suffix)
     elif gpxfile.endswith('gpx.gz'):
         output = gpxfile.replace('.gpx.gz', suffix)
-    else:
-        output = gpxfile + suffix
     return output
 
 
@@ -201,6 +199,8 @@ class GpxCSV():
     def gpxtofile(self, gpxfile, output_name=None, json=False):
         """Convert a gpx file to a csv or json file"""
         self._check_verbose_print(f"Converting: {gpxfile}")
+        if isinstance(gpxfile, str):
+            gpxfile = [gpxfile]
         if len(gpxfile) > 1:
             assert not output_name, "Can't use wildcard and an output name."
         for file in gpxfile:
