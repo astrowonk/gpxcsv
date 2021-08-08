@@ -202,7 +202,7 @@ class GpxCSV():
         if isinstance(gpxfile, str):
             gpxfile = [gpxfile]
         if len(gpxfile) > 1:
-            assert not output_name, "Can't use wildcard and an output name."
+            assert not output_name, "Can't use wildcard or multiple files and an output name."
         for file in gpxfile:
             if file:
                 self._gpxtofile(file, output_name, json)
