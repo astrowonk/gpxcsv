@@ -1,3 +1,5 @@
+arch: arm64       
+os: linux            # optional, this is default
 dist: focal
 language: python
 python:
