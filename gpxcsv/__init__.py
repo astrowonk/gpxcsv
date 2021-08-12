@@ -4,7 +4,7 @@ import gzip
 import json
 from io import StringIO
 
-__VERSION__ = '0.2.13'
+__VERSION__ = '0.2.13.1'
 
 
 def _strip_ns_prefix(tree):
