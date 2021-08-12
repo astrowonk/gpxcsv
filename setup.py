@@ -1,11 +1,12 @@
 import setuptools
+from gpxcsv import __VERSION__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="gpxcsv",
-    version="0.2.13.1",
+    version=__VERSION__,
     author="Marcos Huerta",
     author_email="marcos@marcoshuerta.com",
     description="Convert Garmin GPX file to CSV or simple JSON",
