@@ -66,6 +66,9 @@ df = pd.DataFrame(gpx_list)
 
 ## Release Notes
 
+### 0.2.14
+
+* Fixes issue with gpx files that don't have children of the extension, i.e. no `TrackPointExtension` inside the `Extensions` tag.
 ### 0.2.11
 
 * Adds support for processing a `StringIo` object, which was necessary to use this code as the backend for a Dash web app, which encodes all files as base64 strings.
