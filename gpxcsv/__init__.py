@@ -4,7 +4,7 @@ import gzip
 import json
 from io import StringIO
 
-__VERSION__ = '0.2.13.1'
+__VERSION__ = '0.2.14'
 
 
 def _strip_ns_prefix(tree):
@@ -69,10 +69,14 @@ class GpxCSV():
         ext_dict = {}
         if trackpoint.find('extensions') is not None:
             for extension in list(trackpoint.find('extensions')):
-                ext_dict.update({
-                    x.tag: _try_to_float(x.text)
-                    for x in extension.getchildren()
-                })
+                if extension.getchildren():
+                    ext_dict.update({
+                        x.tag: _try_to_float(x.text)
+                        for x in extension.getchildren()
+                    })
+                else:
+                    ext_dict.update(
+                        {extension.tag: _try_to_float(extension.text)})
         child_dict = {
             x.tag: _try_to_float(x.text)
             for x in trackpoint.getchildren() if x.tag != 'extensions'

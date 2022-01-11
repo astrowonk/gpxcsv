@@ -74,3 +74,9 @@ class TestGpx(unittest.TestCase):
         self.assertTrue(os.path.exists('myfile.csv'))
         out = gpxtolist('myfile.gpx')
         self.assertAlmostEqual(out[0]['ele'], 50.003891)
+
+    def test_odd_extension(self):
+        g = GpxCSV()
+        theList = g.gpxtolist('non_trackpoint_extension.gpx')
+        self.assertEqual(theList[0]['speed'], 0.484723)
+        self.assertEqual(theList[0]['hAcc'], 1.486173)
