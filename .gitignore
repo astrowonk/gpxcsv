@@ -15,3 +15,4 @@ dist
 htmlcov/
 !myfile_multseg.gpx.gz
 !myfile.gpx
+!Tests/non_trackpoint_extension.gpx

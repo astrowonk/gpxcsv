@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Apple Health Export" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <time>2021-11-18T07:33:53Z</time>
+  </metadata>
+  <trk>
+    <name>Route 2021-03-15 1:24am</name>
+    <trkseg>
+      <trkpt lon="-83.0" lat="42.0"><ele>100.0</ele><time>2021-03-15T05:10:31Z</time><extensions><speed>0.484723</speed><course>269.202515</course><hAcc>1.486173</hAcc><vAcc>1.163164</vAcc></extensions></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
