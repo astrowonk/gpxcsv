@@ -74,7 +74,7 @@ class GpxCSV():
                         x.tag: _try_to_float(x.text)
                         for x in extension.getchildren()
                     })
-                else:  #pragma: no cover
+                else:
                     ext_dict.update(
                         {extension.tag: _try_to_float(extension.text)})
         child_dict = {
@@ -113,7 +113,7 @@ class GpxCSV():
                         x.tag: _try_to_float(x.text)
                         for x in extension.getchildren()
                     })
-                else:
+                else:  #pragma: no cover
                     non_trkseg_dict.update(
                         {extension.tag: _try_to_float(extension.text)})
 
