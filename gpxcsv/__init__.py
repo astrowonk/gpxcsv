@@ -63,7 +63,6 @@ class GpxCSV():
         self.silent = silent
         self.errors = errors
 
-
     @staticmethod
     def _process_trackpoint(trackpoint, update_dict={}):
         """Process a trackpoint element into a dictionary"""
@@ -75,7 +74,7 @@ class GpxCSV():
                         x.tag: _try_to_float(x.text)
                         for x in extension.getchildren()
                     })
-                else:
+                else:  #pragma: no cover
                     ext_dict.update(
                         {extension.tag: _try_to_float(extension.text)})
         child_dict = {
