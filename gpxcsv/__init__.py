@@ -4,7 +4,7 @@ import gzip
 import json
 from io import StringIO
 
-__VERSION__ = '0.2.14'
+__VERSION__ = '0.2.15'
 
 
 def _strip_ns_prefix(tree):
@@ -100,8 +100,23 @@ class GpxCSV():
         """process a trk element found in a gpx file"""
         non_trkseg_dict = {
             x.tag: x.text
-            for x in [x for x in list(trk) if x.tag not in ('trkseg', 'link')]
+            for x in [
+                x for x in list(trk)
+                if x.tag not in ('trkseg', 'link', 'extensions')
+            ]
         }
+
+        if trk.find('extensions') is not None:
+            for extension in list(trk.find('extensions')):
+                if extension.getchildren():
+                    non_trkseg_dict.update({
+                        x.tag: _try_to_float(x.text)
+                        for x in extension.getchildren()
+                    })
+                else:
+                    non_trkseg_dict.update(
+                        {extension.tag: _try_to_float(extension.text)})
+
         self._check_verbose_print(
             f'Processing trk with tag info {non_trkseg_dict}')
 
