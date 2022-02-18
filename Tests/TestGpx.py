@@ -80,3 +80,9 @@ class TestGpx(unittest.TestCase):
         theList = g.gpxtolist('non_trackpoint_extension.gpx')
         self.assertEqual(theList[0]['speed'], 0.484723)
         self.assertEqual(theList[0]['hAcc'], 1.486173)
+
+    def test_trk_extension(self):
+        g = GpxCSV()
+        theList = g.gpxtolist('Lannion_Plestin_parcours24.4RE.gpx')
+        self.assertEqual(theList[0]['DisplayColor'], 'Black')
+        self.assertAlmostEqual(theList[0]['ele'], 1.1)
