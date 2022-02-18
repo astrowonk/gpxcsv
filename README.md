@@ -66,6 +66,11 @@ df = pd.DataFrame(gpx_list)
 
 ## Release Notes
 
+
+### 0.2.15
+
+* Fixes issue with `trk` level extension data like `DisplayColor`. This will now be added to the csv file with an identifier along with `trk` name.
+
 ### 0.2.14
 
 * Fixes issue with gpx files that don't have children of the extension, i.e. no `TrackPointExtension` inside the `Extensions` tag.

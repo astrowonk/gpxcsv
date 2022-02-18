@@ -63,6 +63,7 @@ class GpxCSV():
         self.silent = silent
         self.errors = errors
 
+
     @staticmethod
     def _process_trackpoint(trackpoint, update_dict={}):
         """Process a trackpoint element into a dictionary"""
