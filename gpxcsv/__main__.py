@@ -17,39 +17,36 @@ def main():
     parser.add_argument(
         'input_file',
         nargs='+',
-        help=
-        'input gpx file, may be .gpx or gzipped .gpx.gz. Can pass a wildcard like *.gpx'
+        help='input gpx file, may be .gpx or gzipped .gpx.gz. Can pass a wildcard like *.gpx',
     )
     parser.add_argument(
         '-o',
         '--output-file',
         type=str,
-        help=
-        'output file name, optional. Name ending with .json will produce json instead of csv.',
-        default=None)
-    parser.add_argument('-j',
-                        '--json',
-                        action='store_true',
-                        default=False,
-                        help='Output a json file.')
-    parser.add_argument('-v',
-                        '--verbose',
-                        action='store_true',
-                        default=False,
-                        help='Turn on verbose mode')
+        help='output file name, optional. Name ending with .json will produce json instead of csv.',
+        default=None,
+    )
+    parser.add_argument(
+        '-j', '--json', action='store_true', default=False, help='Output a json file.'
+    )
+    parser.add_argument(
+        '-v', '--verbose', action='store_true', default=False, help='Turn on verbose mode'
+    )
     parser.add_argument(
         '-s',
         '--silent',
         action='store_true',
         default=False,
-        help='Turn off all printed output (except errors/asserts)')
+        help='Turn off all printed output (except errors/asserts)',
+    )
 
     parser.add_argument(
         '-r',
         '--raise-errors',
         action='store_true',
         default=False,
-        help='Stop processing / Assert if encountering a non .gpx file')
+        help='Stop processing / Assert if encountering a non .gpx file',
+    )
 
     args = parser.parse_args()
     all_files = []
@@ -60,8 +57,9 @@ def main():
         error = 'errors'
     else:
         error = 'ignore'
-    GpxCSV(verbose=args.verbose, silent=args.silent,
-           errors=error).gpxtofile(all_files, args.output_file, json=args.json)
+    GpxCSV(verbose=args.verbose, silent=args.silent, errors=error).gpxtofile(
+        all_files, args.output_file, json=args.json
+    )
 
 
 if __name__ == '__main__':

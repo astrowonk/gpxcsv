@@ -7,6 +7,7 @@ from io import StringIO
 
 class TestGpx(unittest.TestCase):
     """Unit test the class"""
+
     @classmethod
     def setUpClass(cls) -> None:
         """set up test files"""
@@ -16,11 +17,11 @@ class TestGpx(unittest.TestCase):
         """Test the gpx to file"""
         for file in glob('*.csv') + glob('*.json'):
             os.remove(file)
-        #test with output name
+        # test with output name
         GpxCSV().gpxtofile(['myfile.gpx'], output_name='myfile_test.csv')
         self.assertTrue(os.path.exists('myfile_test.csv'))
 
-        #test without output name
+        # test without output name
         GpxCSV(verbose=True).gpxtofile(['myfile.gpx'])
         self.assertTrue(os.path.exists('myfile.csv'))
 
@@ -55,17 +56,19 @@ class TestGpx(unittest.TestCase):
         self.assertTrue(os.path.exists('myfile.json'))
 
     def test_empty_list(self):
-        self.assertIsNone(GpxCSV()._list_to_csv([], 'out.csv'), )
+        self.assertIsNone(GpxCSV()._list_to_csv([], 'out.csv'))
         self.assertIsNone(GpxCSV()._list_to_json([], 'out.json'))
 
     def test_invalid_filename(self):
         self.assertCountEqual(GpxCSV().gpxtolist('myfile.json'), [])
 
     def test_glob_and_output_name(self):
-        self.assertRaises(AssertionError,
-                          GpxCSV().gpxtofile,
-                          ['myfile.gpx', 'bogus_basin.gpx'],
-                          output_name='out.csv')
+        self.assertRaises(
+            AssertionError,
+            GpxCSV().gpxtofile,
+            ['myfile.gpx', 'bogus_basin.gpx'],
+            output_name='out.csv',
+        )
 
     def test_wrappers(self):
         for file in glob('*.csv') + glob('*.json'):
