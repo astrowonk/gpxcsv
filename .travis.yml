@@ -19,9 +19,11 @@ before_install:
 install:
   - pip install -r requirements.txt
   - pip install --upgrade coverage>=7.6.1
+  - pip install pytest
 # command to run tests
 script:
   - coverage --version
   - python -m unittest discover -s src
+  - pytest src/Tests/testGpx.py
   - coverage run
   - coverage report --fail-under=100
