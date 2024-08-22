@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gpxcsv"
-version = "0.3.0"
+version = "0.3.1"
 description = 'Convert Garmin GPX file to CSV or JSON'
 readme = "README.md"
 requires-python = ">=3.7"
@@ -30,9 +30,9 @@ classifiers = [
 dependencies = ["lxml"]
 
 [project.urls]
-Documentation = "https://github.com/astrowonk/search_transcripts/#readme"
-Issues = "https://github.com/astrowonk/search_transcripts/issues"
-Source = "https://github.com/astrowonk/search_transcripts"
+Documentation = "https://github.com/astrowonk/gpxcsv/#readme"
+Issues = "https://github.com/astrowonk/gpxcsv/issues"
+Source = "https://github.com/astrowonk/gpxcsv"
 
 [project.scripts]
 gpxcsv = "gpxcsv.__main__:main"
@@ -41,7 +41,7 @@ gpxcsv = "gpxcsv.__main__:main"
 [tool.hatch.envs.default]
 dependencies = ["pytest", "pytest-cov"]
 [tool.hatch.envs.default.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=search_transcripts --cov=tests"
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src --cov=tests"
 no-cov = "cov --no-cov"
 
 [[tool.hatch.envs.test.matrix]]
