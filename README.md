@@ -71,7 +71,7 @@ df = pd.DataFrame(gpx_list)
 
 ## Release Notes
 
-### 0.3.0
+### 0.3.1
 
 Switch to `pyproject.toml`. Fix a few minor coverage issues. Use `pathlib` for suffix substitution.
 
