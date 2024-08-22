@@ -15,5 +15,5 @@ dist
 htmlcov/
 !myfile_multseg.gpx.gz
 !myfile.gpx
-!Tests/non_trackpoint_extension.gpx
-!Tests/Lannion_Plestin_parcours24.4RE.gpx
+!src/Tests/non_trackpoint_extension.gpx
+!src/Tests/Lannion_Plestin_parcours24.4RE.gpx
