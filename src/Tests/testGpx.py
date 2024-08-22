@@ -54,8 +54,10 @@ class TestGpx(unittest.TestCase):
         """test json conversion"""
         GpxCSV().gpxtofile(['myfile.gpx'], json=True)
         self.assertTrue(os.path.exists('myfile.json'))
+        GpxCSV().gpxtofile(['myfile.gpx'], json=True, output_name='myfile.json')
 
     def test_empty_list(self):
+        GpxCSV().gpxtofile([None])  # why do I handle this scenario?
         self.assertIsNone(GpxCSV()._list_to_csv([], 'out.csv'))
         self.assertIsNone(GpxCSV()._list_to_json([], 'out.json'))
 
