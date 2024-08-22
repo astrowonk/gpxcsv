@@ -1,7 +1,76 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gpxcsv"
+version = "0.2.15"
+description = 'Convert Garmin GPX file to CSV or JSON'
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = []
+authors = [{ name = "Marcos Huerta", email = "marcos@marcoshuerta.com" }]
+classifiers = [
+  'License :: OSI Approved :: MIT License',
+  'Operating System :: OS Independent',
+
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["lxml"]
+
+[project.urls]
+Documentation = "https://github.com/astrowonk/search_transcripts/#readme"
+Issues = "https://github.com/astrowonk/search_transcripts/issues"
+Source = "https://github.com/astrowonk/search_transcripts"
+
+[project.scripts]
+gpxcsv = "gpxcsv.__main__:main"
+
+
+[tool.hatch.envs.default]
+dependencies = ["pytest", "pytest-cov"]
+[tool.hatch.envs.default.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=search_transcripts --cov=tests"
+no-cov = "cov --no-cov"
+
+[[tool.hatch.envs.test.matrix]]
+python = ["37", "38", "39", "310", "311"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gpxcsv"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/Tests", 'src/gpxcsv']
+command_line = "-m unittest discover -s src"
+
+[tool.coverage.report]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.ruff]
 line-length = 100
 
+[tool.ruff.format]
+quote-style = "preserve"
+indent-style = "space"
+docstring-code-format = true
+skip-magic-trailing-comma = true
 
-[lint]
+[tool.ruff.lint]
 preview = true
 extend-select = [
   "E999", # syntax-error
@@ -145,52 +214,15 @@ extend-select = [
   "PLW1501", # bad-open-mode
   # "PLW4906",  # deprecated-attribute
 ]
-
 ignore = [
   # "PLC0103",  # invalid-name
   # "PLC0104",  # disallowed-name
   # "PLC0105",  # typevar-name-incorrect-variance
   "D419", # empty-docstring
-  # "PLC0114",  # missing-module-docstring
-  # "PLC0115",  # missing-class-docstring
-  # "PLC0116",  # missing-function-docstring
-  # "PLC0117",  # unnecessary-negation
-  # "PLC0121",  # singleton-comparison
-  # "PLC0123",  # unidiomatic-typecheck
-  # "PLC0131",  # typevar-double-variance
-  # "PLC0132",  # typevar-name-mismatch
-  # "PLC0200",  # consider-using-enumerate
-  # "PLC0201",  # consider-iterating-dictionary
-  # "PLC0202",  # bad-classmethod-argument
-  # "PLC0203",  # bad-mcs-method-argument
-  # "PLC0204",  # bad-mcs-classmethod-argument
-  # "PLC0205",  # single-string-used-for-slots
-  # "PLC0206",  # consider-using-dict-items
-  # "PLC0207",  # use-maxsplit-arg
-  # "PLC0208",  # use-sequence-for-iteration
-  # "PLC0209",  # consider-using-f-string
   "E501", # line-too-long
   # "PLC0302",  # too-many-lines
-  "W291", # trailing-whitespace
-  # "PLC0304",  # missing-final-newline
-  # "PLC0305",  # trailing-newlines
-  # "PLC0321",  # multiple-statements
-  # "PLC0325",  # superfluous-parens
-  # "PLC0327",  # mixed-line-endings
-  # "PLC0328",  # unexpected-line-ending-format
-  # "PLC0401",  # wrong-spelling-in-comment
-  # "PLC0402",  # wrong-spelling-in-docstring
-  # "PLC0403",  # invalid-characters-in-docstring
-  # "PLC0410",  # multiple-imports
-  # "PLC0411",  # wrong-import-order
-  # "PLC0412",  # ungrouped-imports
-  # "PLC0413",  # wrong-import-position
+  "W291",    # trailing-whitespace
   "PLC0414", # useless-import-alias
-  # "PLC0415",  # import-outside-toplevel
-  # "PLC1802",  # use-implicit-booleaness-not-len
-  # "PLC1803",  # use-implicit-booleaness-not-comparison
-  # "PLC1804",  # use-implicit-booleaness-not-comparison-to-string
-  # "PLC1805",  # use-implicit-booleaness-not-comparison-to-zero
   "PLC2401", # non-ascii-name
   # "PLC2403",  # non-ascii-module-import
   # "PLC2503",  # bad-file-encoding
@@ -231,134 +263,23 @@ ignore = [
   "PLR1702", # too-many-nested-blocks
   # "PLR1703",  # simplifiable-if-statement
   "PLR1704", # redefined-argument-from-local
-  # "PLR1705",  # no-else-return
-  # "PLR1706",  # consider-using-ternary
-  # "PLR1707",  # trailing-comma-tuple
-  # "PLR1708",  # stop-iteration-return
-  # "PLR1709",  # simplify-boolean-expression
-  # "PLR1710",  # inconsistent-return-statements
   "PLR1711", # useless-return
-  # "PLR1712",  # consider-swap-variables
-  # "PLR1713",  # consider-using-join
-  # "PLR1714",  # consider-using-in
-  # "PLR1715",  # consider-using-get
-  # "PLR1716",  # chained-comparison
-  # "PLR1717",  # consider-using-dict-comprehension
-  # "PLR1718",  # consider-using-set-comprehension
-  # "PLR1719",  # simplifiable-if-expression
-  # "PLR1720",  # no-else-raise
-  "C416", # unnecessary-comprehension
-  # "PLR1722",  # consider-using-sys-exit
-  # "PLR1723",  # no-else-break
-  # "PLR1724",  # no-else-continue
-  # "PLR1725",  # super-with-arguments
-  # "PLR1726",  # simplifiable-condition
-  # "PLR1727",  # condition-evals-to-constant
-  # "PLR1728",  # consider-using-generator
-  # "PLR1729",  # use-a-generator
-  # "PLR1730",  # consider-using-min-builtin
-  # "PLR1731",  # consider-using-max-builtin
-  # "PLR1732",  # consider-using-with
+  "C416",    # unnecessary-comprehension
   "PLR1733", # unnecessary-dict-index-lookup
-  # "PLR1734",  # use-list-literal
-  # "PLR1735",  # use-dict-literal
   "PLR1736", # unnecessary-list-index-lookup
-  # "PLW0012",  # unknown-option-value
-  # "PLW0102",  # dangerous-default-value
-  # "PLW0104",  # pointless-statement
-  # "PLW0105",  # pointless-string-statement
-  # "PLW0106",  # expression-not-assigned
-  # "PLW0107",  # unnecessary-pass
   "PLW0108", # unnecessary-lambda
   "PLW0120", # useless-else-on-loop
-  # "PLW0122",  # exec-used
-  # "PLW0123",  # eval-used
-  # "PLW0124",  # confusing-with-statement
-  # "PLW0125",  # using-constant-test
-  # "PLW0126",  # missing-parentheses-for-call-in-test
   "PLW0127", # self-assigning-variable
   "PLW0128", # redeclared-assigned-name
   "PLW0129", # assert-on-string-literal
   "B033",    # duplicate-value
   "PLW0131", # named-expr-without-context
-  # "PLW0133",  # pointless-exception-statement
-  # "PLW0134",  # return-in-finally
-  # "PLW0143",  # comparison-with-callable
-  # "PLW0150",  # lost-exception
-  # "PLW0177",  # nan-comparison
-  # "PLW0199",  # assert-on-tuple
-  # "PLW0201",  # attribute-defined-outside-init
-  # "PLW0211",  # bad-staticmethod-argument
-  # "PLW0212",  # protected-access
-  # "PLW0213",  # implicit-flag-alias
-  # "PLW0221",  # arguments-differ
-  # "PLW0222",  # signature-differs
-  # "PLW0223",  # abstract-method
-  # "PLW0231",  # super-init-not-called
-  # "PLW0233",  # non-parent-init-called
-  # "PLW0236",  # invalid-overridden-method
-  # "PLW0237",  # arguments-renamed
-  # "PLW0238",  # unused-private-member
-  # "PLW0239",  # overridden-final-method
-  # "PLW0240",  # subclassed-final-class
-  # "PLW0244",  # redefined-slots-in-subclass
   "PLW0245", # super-without-brackets
-  # "PLW0246",  # useless-parent-delegation
-  # "PLW0311",  # bad-indentation
-  # "PLW0401",  # wildcard-import
-  # "PLW0404",  # reimported
   "PLW0406", # import-self
-  # "PLW0407",  # preferred-module
-  # "PLW0410",  # misplaced-future
-  # "PLW0416",  # shadowed-import
-  # "PLW0511",  # fixme
-  # "PLW0601",  # global-variable-undefined
   "PLW0603", # global-statement
   "PLW0604", # global-at-module-level
   "F401",    # unused-import
-  # "PLW0613",  # unused-argument
-  # "PLW0614",  # unused-wildcard-import
-  # "PLW0621",  # redefined-outer-name
-  # "PLW0622",  # redefined-builtin
-  # "PLW0631",  # undefined-loop-variable
-  # "PLW0632",  # unbalanced-tuple-unpacking
-  # "PLW0640",  # cell-var-from-loop
-  # "PLW0641",  # possibly-unused-variable
-  # "PLW0642",  # self-cls-assignment
-  # "PLW0644",  # unbalanced-dict-unpacking
-  "E722", # bare-except
-  # "PLW0705",  # duplicate-except
-  # "PLW0706",  # try-except-raise
-  # "PLW0707",  # raise-missing-from
-  # "PLW0715",  # raising-format-tuple
-  # "PLW0716",  # wrong-exception-operation
-  # "PLW0718",  # broad-exception-caught
-  # "PLW0719",  # broad-exception-raised
-  # "PLW1113",  # keyword-arg-before-vararg
-  # "PLW1114",  # arguments-out-of-order
-  # "PLW1115",  # non-str-assignment-to-dunder-name
-  # "PLW1116",  # isinstance-second-argument-not-valid-type
-  # "PLW1117",  # kwarg-superseded-by-positional-arg
-  # "PLW1201",  # logging-not-lazy
-  # "PLW1202",  # logging-format-interpolation
-  # "PLW1203",  # logging-fstring-interpolation
-  # "PLW1300",  # bad-format-string-key
-  # "PLW1301",  # unused-format-string-key
-  # "PLW1303",  # missing-format-argument-key
-  # "PLW1304",  # unused-format-string-argument
-  # "PLW1305",  # format-combined-specification
-  # "PLW1306",  # missing-format-attribute
-  # "PLW1307",  # invalid-format-index
-  # "PLW1308",  # duplicate-string-formatting-argument
-  # "PLW1309",  # f-string-without-interpolation
-  # "PLW1310",  # format-string-without-interpolation
-  # "PLW1402",  # anomalous-unicode-escape-in-string
-  # "PLW1404",  # implicit-str-concat
-  # "PLW1405",  # inconsistent-quotes
-  # "PLW1406",  # redundant-u-string-prefix
-  # "PLW1503",  # redundant-unittest-assert
-  # "PLW1506",  # bad-thread-instantiation
-  # "PLW1507",  # shallow-copy-environ
+  "E722",    # bare-except
   "PLW1508", # invalid-envvar-default
   "PLW1509", # subprocess-popen-preexec-fn
   # "PLW1510",  # subprocess-run-check
@@ -380,8 +301,3 @@ ignore = [
   # "PLW4904",  # deprecated-class
   # "PLW4905",  # deprecated-decorator
 ]
-
-[format]
-quote-style = "single"
-docstring-code-format = true
-skip-magic-trailing-comma = false

@@ -11,7 +11,7 @@ class TestGpx(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """set up test files"""
-        os.chdir('./Tests')
+        os.chdir('src/Tests')
 
     def test_gpx_to_file(self):
         """Test the gpx to file"""
