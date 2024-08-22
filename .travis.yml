@@ -22,5 +22,6 @@ install:
 # command to run tests
 script:
   - coverage --version
+  - python -m unittest discover -s src
   - coverage run
   - coverage report --fail-under=100
