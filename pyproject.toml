@@ -57,9 +57,25 @@ packages = ["src/gpxcsv"]
 branch = true
 source = ["src/Tests", 'src/gpxcsv']
 command_line = "-m unittest discover -s src"
+omit = ["src/gpxcsv/__main__.py"]
+
 
 [tool.coverage.report]
-exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+fail_under = 90
+omit = ["src/gpxcsv/__main__.py"]
+
+exclude_also = [
+  "def __repr__",
+  "if self.debug:",
+  "if settings.DEBUG",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "class .*\\bProtocol\\):",
+  "@(abc\\.)?abstractmethod",
+]
 
 [tool.ruff]
 line-length = 100
