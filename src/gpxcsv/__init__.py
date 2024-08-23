@@ -70,15 +70,11 @@ class GpxCSV:
         if trackpoint.find('extensions') is not None:
             for extension in list(trackpoint.find('extensions')):
                 if extension.getchildren():
-                    ext_dict.update(
-                        {x.tag: _try_to_float(x.text) for x in extension.getchildren()}
-                    )
+                    ext_dict.update({x.tag: _try_to_float(x.text) for x in extension.getchildren()})
                 else:
                     ext_dict.update({extension.tag: _try_to_float(extension.text)})
         child_dict = {
-            x.tag: _try_to_float(x.text)
-            for x in trackpoint.getchildren()
-            if x.tag != 'extensions'
+            x.tag: _try_to_float(x.text) for x in trackpoint.getchildren() if x.tag != 'extensions'
         }
         final_dict = {key: _try_to_float(val) for key, val in trackpoint.attrib.items()}
 
@@ -120,9 +116,7 @@ class GpxCSV:
                 non_trkseg_dict.update({'trkseg': n + 1})
             temp_trackpoints = trkseg.findall('trkpt')
 
-            self._check_verbose_print(
-                f'{len(temp_trackpoints)} trackpoints found in segment {n+1}'
-            )
+            self._check_verbose_print(f'{len(temp_trackpoints)} trackpoints found in segment {n+1}')
             seg_trackpoints = [
                 self._process_trackpoint(x, non_trkseg_dict) for x in trkseg.findall('trkpt')
             ]
@@ -181,9 +175,7 @@ class GpxCSV:
         ):
             return []
         assert (
-            isinstance(gpxfile, StringIO)
-            or gpxfile.endswith('.gpx')
-            or gpxfile.endswith('.gpx.gz')
+            isinstance(gpxfile, StringIO) or gpxfile.endswith('.gpx') or gpxfile.endswith('.gpx.gz')
         ), 'File must be gpx or gpx.gz'
         root = _load_and_clean_gpx(gpxfile)
         all_trackpoints = self._process_tree_tracks(root)

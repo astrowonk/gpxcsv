@@ -89,7 +89,6 @@ skip-magic-trailing-comma = true
 [tool.ruff.lint]
 preview = true
 extend-select = [
-  "E999", # syntax-error
   # "PLE0011",  # unrecognized-inline-option
   # "PLE0013",  # bad-plugin-value
   # "PLE0014",  # bad-configuration-section
