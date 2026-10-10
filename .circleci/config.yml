@@ -1,0 +1,61 @@
+version: 2.1
+
+jobs:
+    test:
+        parameters:
+            python-version:
+                type: string
+        docker:
+            - image: cimg/python:<< parameters.python-version >>
+        working_directory: ~/project
+        steps:
+            - checkout
+
+            - run:
+                  name: Skip CI for documentation-only changes
+                  command: |
+                      if [ -z "${CIRCLE_PULL_REQUEST:-}" ]; then
+                        echo "No pull request detected; skipping documentation-only check."
+                        exit 0
+                      fi
+
+                      BASE_BRANCH="${CIRCLE_BRANCH:-main}"
+                      git fetch origin "${BASE_BRANCH}" || true
+
+                      CHANGED_FILES=$(git diff --name-only "origin/${BASE_BRANCH}...HEAD" 2>/dev/null || git diff --name-only HEAD~1 HEAD)
+
+                      if [ -n "$CHANGED_FILES" ] && ! echo "$CHANGED_FILES" | grep -qvE '(\.md$|\.png$|\.pdf$|\.html$|^LICENSE|^docs/)'; then
+                        echo "Only documentation files were updated, not running the CI."
+                        circleci-agent step halt
+                      fi
+
+            - run:
+                  name: Install dependencies
+                  command: |
+                      python -m pip install --upgrade pip
+                      pip install -r requirements.txt
+                      pip install --upgrade 'coverage>=7.6.1'
+                      pip install pytest
+
+            - run:
+                  name: Run tests and coverage
+                  command: |
+                      coverage --version
+                      python -m unittest discover -s src
+                      pytest src/Tests/testGpx.py
+                      coverage run
+                      coverage report --fail-under=100
+
+workflows:
+    test-all-python-versions:
+        jobs:
+            - test:
+                  matrix:
+                      parameters:
+                          python-version: [
+                              "3.10",
+                              "3.11",
+                              "3.12",
+                              "3.13",
+                              "3.14",
+                          ]
