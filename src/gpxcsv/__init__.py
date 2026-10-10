@@ -116,7 +116,9 @@ class GpxCSV:
                 non_trkseg_dict.update({'trkseg': n + 1})
             temp_trackpoints = trkseg.findall('trkpt')
 
-            self._check_verbose_print(f'{len(temp_trackpoints)} trackpoints found in segment {n+1}')
+            self._check_verbose_print(
+                f'{len(temp_trackpoints)} trackpoints found in segment {n + 1}'
+            )
             seg_trackpoints = [
                 self._process_trackpoint(x, non_trkseg_dict) for x in trkseg.findall('trkpt')
             ]
@@ -171,12 +173,12 @@ class GpxCSV:
         if (
             self.errors == 'ignore'
             and isinstance(gpxfile, str)
-            and not (gpxfile.endswith('.gpx') or gpxfile.endswith('.gpx.gz'))
+            and not (gpxfile.endswith(('.gpx', '.gpx.gz')))
         ):
             return []
-        assert (
-            isinstance(gpxfile, StringIO) or gpxfile.endswith('.gpx') or gpxfile.endswith('.gpx.gz')
-        ), 'File must be gpx or gpx.gz'
+        assert isinstance(gpxfile, StringIO) or gpxfile.endswith(('.gpx', '.gpx.gz')), (
+            'File must be gpx or gpx.gz'
+        )
         root = _load_and_clean_gpx(gpxfile)
         all_trackpoints = self._process_tree_tracks(root)
         return all_trackpoints
